@@ -3,6 +3,7 @@ var express = require('express'),
     app = express(),
     server = require('http').createServer(app);
 
+
     var socketsPort = 8081,
         mqttPort = 8080, // need to be diffrent to socketsPort
         serverAddress = "127.0.0.1";
@@ -25,3 +26,4 @@ app.get('/', function (req, res) {
 
         res.sendfile(__dirname + '/index.html');
 });
+

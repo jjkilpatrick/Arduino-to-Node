@@ -2,6 +2,8 @@ var app = require("./app"),
     mqttController = require("./mqttcontroller"),
     mqtt = require('mqttjs');
 
+
+
 var thisMqttServer = mqtt.createServer(function (client) {
 
     var self = this;
@@ -30,10 +32,16 @@ var thisMqttServer = mqtt.createServer(function (client) {
 
                 self.clients[k].publish({topic: packet.topic, payload: packet.payload});
 
-                console.log( "TOPIC: " , packet.topic);
-                console.log( "PACKET: " , packet.payload);
+                var location =  packet.topic.split("/"),
+                location =  parseInt(location[0]);
 
-                console.log( mqttController.output )
+                console.log("location: ", location);
+                console.log("User: ", packet.payload);
+
+                if( packet.topic != "connected/yes") {
+
+                    mqttController.postRfid(packet.payload, location);
+                }
 
         }
     });
@@ -81,3 +89,6 @@ var thisMqttServer = mqtt.createServer(function (client) {
     });
 
 }).listen(app.mqttPort);
+
+// subClient.subscribeTo('burrito/');
+
