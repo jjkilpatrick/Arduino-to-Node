@@ -2,8 +2,6 @@ var app = require("./app"),
     mqttController = require("./mqttcontroller"),
     mqtt = require('mqttjs');
 
-
-
 var thisMqttServer = mqtt.createServer(function (client) {
 
     var self = this;
@@ -38,7 +36,7 @@ var thisMqttServer = mqtt.createServer(function (client) {
                 console.log("location: ", location);
                 console.log("User: ", packet.payload);
 
-                if( packet.topic != "connected/yes") {
+                if( packet.topic != "connected/yes") { //NOT the inital connect pass tpo controller
 
                     mqttController.postRfid(packet.payload, location);
                 }
@@ -89,6 +87,3 @@ var thisMqttServer = mqtt.createServer(function (client) {
     });
 
 }).listen(app.mqttPort);
-
-// subClient.subscribeTo('burrito/');
-

@@ -1,12 +1,4 @@
 var needle = require('needle');
-var output = "this is an mqtt ouput";
-
-var tagNumber = '4400E6A02A28';
-var message = {
-    location : 1,
-    user : tagNumber
-}
-
 
 function postRfid (tagId, location){
 
@@ -17,6 +9,7 @@ function postRfid (tagId, location){
         location : loc,
         user : id
     }
+
     console.log("message to send: ", message);
 
     needle.post('http://192.168.1.69/rest-api/api/user/id/' + id + '/format/json', message , { username: '4ark4ble', password: 'remarkable'} ,
@@ -29,5 +22,4 @@ function postRfid (tagId, location){
     );
 }
 
-exports.output = output;
 exports.postRfid = postRfid;

@@ -1,18 +1,15 @@
 #include <SPI.h>
-#include <WiFly.h>
+#include <Ethernet.h>
 #include <PubSubClient.h>
 #include <SoftwareSerial.h>
-#include "wifi_credentials.h"
 
-
-//wifly
-byte ip[] = { 192, 168, 1, 147 }; // DEVELOPMENT
-// byte ip[] = { 178, 79, 132, 119 }; // PRODUCTION
-WiFlyClient fypClient;
+byte mac[] = { 0x90, 0xA2, 0xDA, 0x0D, 0x02, 0xE0 };
+byte ip[] = { 192, 168, 1, 123 };
+byte samip[] = { 192, 168, 1, 147 }; // DEVELOPMENT
 
 SoftwareSerial id20(3,2); // virtual serial port
 int RFIDResetPin = 7;
-
+EthernetClient client;
 
 // Sam
 char* onSignal = "1";
@@ -21,7 +18,7 @@ char* burrito = "3/";
 char* mainStage = "1/";
 char* secondStage = "2/";
 byte currentPayload;
-PubSubClient cl(ip, 8080, subscriptions, fypClient);
+PubSubClient cl(samip, 8080, subscriptions, client);
 
 // Register Tags
 char tag1[13] = "4400E6A4D2D4";
@@ -32,16 +29,13 @@ char tag5[13] = "4400E6BFADB0";
 char tag6[13] = "4400E6FE4B17";
 char tag7[13] = "4400E6FB7A23";
 
-
 void subscriptions (char* topic, byte* payload, unsigned int length) {
 
 }
 
 // Setup Function
 void setup() {
-
-wifiConnect();
-
+  Ethernet.begin(mac, ip);
   Serial.begin(9600);
   id20.begin(9600);
 
@@ -103,20 +97,20 @@ void checkTag(char tag[]){
 
   if(compareTag(tag, tag1)){ // if matched tag1, do this
     lightLED(8);
-    cl.publish(burrito, tag1);
+    cl.publish(mainStage, tag1);
   } else if(compareTag(tag, tag2)){
     lightLED(8);
-    cl.publish(burrito, tag2);
+    cl.publish(mainStage, tag2);
   } else if(compareTag(tag, tag3)){
     lightLED(8);
-    cl.publish(burrito, tag3);
+    cl.publish(mainStage, tag3);
   } else if(compareTag(tag, tag4)){
     lightLED(8);
-    cl.publish(burrito, tag4);
+    cl.publish(mainStage, tag4);
   } else if(compareTag(tag, tag5)){
     lightLED(8);
-    cl.publish(burrito, tag5);
-} else if(compareTag(tag, tag6)){
+    cl.publish(mainStage, tag5);
+  } else if(compareTag(tag, tag6)){
     lightLED(8);
     cl.publish(burrito, tag6);
     } else if(compareTag(tag, tag7)){
@@ -131,6 +125,9 @@ void checkTag(char tag[]){
 void mqttSubscribe(){
 
   if (cl.connect("Arduino")) {
+
+      //List Topics to subscribe to ->
+      // cl.publish(connectedCheck, onSignal);
 
       Serial.println("MQTT connected.");
 
@@ -178,28 +175,4 @@ boolean compareTag(char one[], char two[]){
   }
 
   return true; //no mismatches
-}
-
-
-void wifiConnect() {
-
-  WiFly.begin();
-
-  Serial.println("WiFly Connecting...");
-  delay(3000);
-
-    if (!WiFly.join(ssid, passphrase)) {
-
-      Serial.println("Connection failed.");
-
-      while (1) {
-
-        Serial.println("hanging...");
-      // Hang on failure.
-      }
-  }
-
-  Serial.println("Connected to WiFi!");
-  delay(3000);
-
 }
