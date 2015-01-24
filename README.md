@@ -1,6 +1,6 @@
 # Arduino to Node
 
-Scanning RFID tags at multiple points. Sends the data over wifi to Node using MQTT. Data is then sent to a PHP framework for storage.
+A hack day project for scanning RFID tags at multiple Arduino points/stations. Data is sent over wifi to Node using MQTT. Data is then sent to a PHP framework for storage.
 
 ## Future Updates
 
