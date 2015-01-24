@@ -1,4 +1,8 @@
-#This is the README for RFID-HACK
+# Arduino to Node
 
-MQTTJS module is not excluded as the version now on NPM has a breaking APi and is no longer compatible with this code. Future release of this project whill be updated to reflect the latest version and its new API Design.
+Scanning RFID tags at multiple points. Sends the data over wifi to Node using MQTT. Data is then sent to a PHP framework for storage.
 
+## Future Updates
+
+Remove PHP framework and store data directly into Parse
+Build data vis using Parse and D3
